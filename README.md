@@ -63,17 +63,17 @@ human-in-the-loop interrupt/resume via checkpointing.
                                            +-> :hold               (:hard? true)
 ```
 
-- `src/teller_services/store.cljc` — `Store` protocol + `MemStore`:
+- `src/teller_services/store.cljk` — `Store` protocol + `MemStore`:
   registered accounts, committed records, an append-only audit
   ledger.
-- `src/teller_services/advisor.cljc` — `Advisor` protocol;
+- `src/teller_services/advisor.cljk` — `Advisor` protocol;
   `mock-advisor` (deterministic, default) proposes a teller operation
   from a request; `llm-advisor` wraps a `langchain.model/ChatModel` —
   either way the advisor only ever produces a `:propose`-effect
   proposal, never a committed record, and LLM parse failures always
   yield `confidence 0.0` (forces escalation, never fabricated
   confidence).
-- `src/teller_services/governor.cljc` — `TellerServicesGovernor/check`:
+- `src/teller_services/governor.cljk` — `TellerServicesGovernor/check`:
   a pure function, wired as its own `:govern` node. Hard invariants
   (unregistered account, a proposal whose `:effect` isn't `:propose`)
   always route to `:hold`. Escalation invariants
@@ -83,7 +83,7 @@ human-in-the-loop interrupt/resume via checkpointing.
   on explicit human approval (`actor/approve!`), matching the README's
   robotics-premise statement that cash disbursement above a threshold
   and identity-verification overrides always require human sign-off.
-- `src/teller_services/actor.cljc` — `build-graph`, `run-request!`,
+- `src/teller_services/actor.cljk` — `build-graph`, `run-request!`,
   `approve!`: the `langgraph.graph/state-graph` wiring itself.
 
 ```bash
