@@ -1,5 +1,5 @@
 (ns teller-services.governor-test
-  (:require [clojure.test :refer [deftest is testing]]
+  (:require [kotoba.test :refer [deftest is testing]]
             [teller-services.store :as store]
             [teller-services.governor :as governor]))
 
