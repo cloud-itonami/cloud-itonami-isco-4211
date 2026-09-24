@@ -1,0 +1,31 @@
+;; What this vertical's robot physically does, declared for
+;; kotoba.robotics.process (kotoba-lang/robotics). `kbb -M:physics` runs it.
+;;
+;; README "Robotics premise": a document-handling robot performs cash-drawer
+;; reconciliation support and physical filing of transaction slips (ISCO
+;; 4211). Its physical work is lifting coin trays into the teller drawer, and
+;; carrying the cash cassette between the counter and the vault.
+;;
+;; Every number without a cited source is marked `estimate` in its :basis.
+{:physics/schema "itonami.physical-ai.spec.v1"
+ :repo "cloud-itonami/cloud-itonami-isco-4211"
+ :cases
+ [{:id :coin-tray-to-drawer
+   :kind :manipulator
+   :procedure "arm lifts a loaded coin tray from the counting bench into the teller cash drawer"
+   :params {:l1-m 0.45 :l2-m 0.40 :m1-kg 3.5 :m2-kg 2.5
+            :from [0.30 0.50] :to [0.65 0.05] :duration-s 2.0 :steps 400}
+   :sweep {:param :payload-kg :values [0.5 1.0 2.0 4.0 6.0]}
+   :quantity :peak-tau1-nm
+   :limit {:max 60.0 :basis "estimate: continuous shoulder torque of a light collaborative arm (~5 kg class)"}
+   :boundary {:lo 0.1 :hi 20.0}}
+  {:id :cash-cassette-to-vault
+   :kind :transport
+   :procedure "robot carries the end-of-day cash cassette from the teller line to the vault"
+   :params {:mass-kg 45.0 :payload-kg 8.0 :v-max-mps 0.8 :a-max-mps2 0.5
+            :brake-decel-mps2 0.8 :drive-force-n 90.0 :crr 0.02
+            :cog-height-m 0.50 :support-half-length-m 0.25}
+   :sweep {:param :distance-m :values [10.0 20.0 40.0 60.0 90.0]}
+   :quantity :cycle-time-s
+   :limit {:max 60.0 :basis "estimate: cash in transit inside the branch should be exposed for under a minute per leg"}
+   :boundary {:lo 2.0 :hi 400.0}}]}
